@@ -40,10 +40,10 @@ def compare_lists(list1, list2):
     return diff_count / len(list1)
 
 # 读取 pcap 文件
-packets = rdpcap('test.pcap')
+packets = rdpcap('modified_test.pcap')
 # 设置丢包率和乱序率
 
-packet_reorder_rate = 0.3
+packet_reorder_rate = 0.05
 #对每个包增加丢包率
 # 对所有包增加乱序率
 packets = packet_reorder(packets, packet_reorder_rate)
@@ -51,7 +51,7 @@ packets = list(filter(lambda p: p is not None, packets))
 # 发送所有包
 wrpcap('new_test.pcap', packets)
 
-packets1=rdpcap('test.pcap')
+packets1=rdpcap('modified_test.pcap')
 packets2=rdpcap('new_test.pcap')
 print(compare_lists(packets1,packets2))
 

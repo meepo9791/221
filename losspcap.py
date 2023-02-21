@@ -10,7 +10,7 @@ def packet_loss(packet_list, drop_rate):
 
 # 读取 pcap 文件
 packets = rdpcap('test.pcap')
-# 设置丢包率和乱序率
+# 设置丢包率
 packet_loss_rate = 0.15
 
 #对每个包增加丢包率
