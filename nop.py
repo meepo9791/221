@@ -6,8 +6,9 @@ import numpy as np
 from scipy.stats import entropy
 import pyshark
 
+
 def rdipd(pcapname):
-    array=[]
+    array = []
     capture = pyshark.FileCapture(pcapname, display_filter='udp', decode_as={'udp.port==65362': 'rtp'},
                                   tshark_path='D:\wireshark\\tshark.exe')
     # 初始化 m 位为 1 的数据包数量
@@ -52,20 +53,15 @@ def rdipd(pcapname):
             # 如果 m 位不为 1，则间隔数据包数量加 1
             if m_start == 1:
                 interval_count += 1
-    #print(time_intervals)
+    # print(time_intervals)
     return array
-
-
-
-
-
 
 
 p = rdipd('test.pcap')
 print(p)
 q = rdipd('modified_test.pcap.')
 print(q)
-print(ks_2samp(p,q))
+print(ks_2samp(p, q))
 
 p = np.asarray(p, dtype=np.float64)
 q = np.asarray(q, dtype=np.float64)
