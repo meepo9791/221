@@ -13,6 +13,7 @@ list = []
 m_bit_count = 0
 m_start = 0
 m_count = 0
+
 # 初始化间隔数据包数量
 interval_count = 0
 modified_packets = []
