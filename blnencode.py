@@ -8,19 +8,21 @@ from scapy.all import wrpcap
 
 new_array=[]
 new_array = ast.literal_eval(input("请输入隐秘信息，使用逗号隔开: "))
+bits = int(input("请输入秘密信息位数: "))
 array = []
-bl2 = 0
-for i in range(len(new_array)):
-    if i%2==0:   bl2 += new_array[i]*2
-    else:
-        bl2 += new_array[i]
-        array.append(bl2)
-        bl2=0
+def binary_conversion(lst, n):
+    decimal_lst = []
+    for i in range(0, len(lst), n):
+        binary_str = ''.join(map(str, lst[i:i+n]))
+        decimal_num = int(binary_str, 2)
+        decimal_lst.append(decimal_num)
+    return decimal_lst
+array = binary_conversion(new_array,bits)
 print(array)
 
 
 infile = "test.pcap"
-outfile = "bl2modified_" + infile
+outfile = "blnmodified_" + infile
 dest_port = 65364  # usefull to make sure you only action packets that are RTP
 
 
