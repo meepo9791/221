@@ -21,7 +21,8 @@ modified_packets = []
 # array=[0,1,1,1,1,1,1]
 array = []
 # array = input('secret message:')
-array = ast.literal_eval(input("请输入隐秘信息，使用逗号隔开: "))
+input_str = input("请输入隐秘信息：")
+array = [int(char) for char in input_str]
 pl = rdpcap(infile)
 
 # print number of packets

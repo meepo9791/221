@@ -7,7 +7,9 @@ from scapy.all import wrpcap
 
 
 new_array=[]
-new_array = ast.literal_eval(input("请输入隐秘信息，使用逗号隔开: "))
+input_str = input("请输入隐秘信息：")
+new_array = [int(char) for char in input_str]
+
 bits = int(input("请输入秘密信息位数: "))
 array = []
 def binary_conversion(lst, n):

@@ -4,9 +4,9 @@ from scapy.all import Raw
 from pyshark.capture.file_capture import FileCapture
 array = []
 new_array = []
-
+list2=[3, 2, 2, 2]
 # 使用 pyshark 读取 pcap 文件
-capture = pyshark.FileCapture("bl2modified_test.pcap", display_filter='udp', decode_as={'udp.port==65362': 'rtp'}, tshark_path='D:\wireshark\\tshark.exe')
+capture = pyshark.FileCapture("blvmodified_test.pcap", display_filter='udp', decode_as={'udp.port==65362': 'rtp'}, tshark_path='D:\wireshark\\tshark.exe')
 # 初始化 m 位为 1 的数据包数量
 bln = 4
 m_bit_count = 0
@@ -36,16 +36,22 @@ for packet in capture:
         # 如果 m 位不为 1，则间隔数据包数量加 1
         if m_start == 1:
          interval_count += 1
-
+def convert_to_binary_list(nums, x):
+    result = []
+    for num in nums:
+        binary = bin(num)[2:]
+        if len(binary) < x:
+            binary = '0' * (x - len(binary)) + binary
+        result.append(list(binary))
+    return result
 # 输出结果数组
 #wrpcap("output.pcap", modified_packets)
 print('interval count is:',array)
-for i in array:
 
-    binary_str = bin(i)[2:]  # 将十进制数字转换为二进制字符串，并去掉前缀'0b'
-    binary_list = [int(bit) for bit in binary_str]  # 将二进制字符串转换为整型列表
+for x in list2:
+    binary_list = convert_to_binary_list(array, x)
+
     #print(binary_list)
-    for bit in binary_list:
-        new_array.append(bit)
-print('secret message is:',new_array)
+
+print('secret message is:',binary_list)
 #wrpcap('output.pcap',modified_packets)
