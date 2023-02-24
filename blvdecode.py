@@ -2,9 +2,10 @@ import pyshark
 from scapy.utils import wrpcap
 from scapy.all import Raw
 from pyshark.capture.file_capture import FileCapture
+from blvencode import blenghlist
+
 array = []
-new_array = []
-list2=[3, 2, 2, 2]
+list2 = blenghlist
 # 使用 pyshark 读取 pcap 文件
 capture = pyshark.FileCapture("blvmodified_test.pcap", display_filter='udp', decode_as={'udp.port==65362': 'rtp'}, tshark_path='D:\wireshark\\tshark.exe')
 # 初始化 m 位为 1 的数据包数量
@@ -52,6 +53,6 @@ for x in list2:
     binary_list = convert_to_binary_list(array, x)
 
     #print(binary_list)
-
-print('secret message is:',binary_list)
+    new_list = [item for sublist in binary_list for item in sublist]
+print('secret message is:',new_list)
 #wrpcap('output.pcap',modified_packets)
