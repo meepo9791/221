@@ -37,22 +37,34 @@ for packet in capture:
         # 如果 m 位不为 1，则间隔数据包数量加 1
         if m_start == 1:
          interval_count += 1
-def convert_to_binary_list(nums, x):
-    result = []
-    for num in nums:
-        binary = bin(num)[2:]
-        if len(binary) < x:
-            binary = '0' * (x - len(binary)) + binary
-        result.append(list(binary))
-    return result
+def dec_to_bin_list(decimal_list, length_list):
+    """
+    Convert decimal numbers in decimal_list to binary numbers with lengths defined by corresponding elements in
+    length_list. Stop when length_list is exhausted.
+
+    Args:
+        decimal_list (list): A list of decimal numbers.
+        length_list (list): A list of integer values representing the length of the binary numbers to convert to.
+
+    Returns:
+        A list of binary numbers as strings.
+    """
+    binary_list = []
+    for i, length in enumerate(length_list):
+        if i >= len(decimal_list):
+            break
+        binary_str = format(decimal_list[i], 'b')
+        binary_list.append(binary_str.zfill(length))
+    return binary_list
+
 # 输出结果数组
 #wrpcap("output.pcap", modified_packets)
 print('interval count is:',array)
 
-for x in list2:
-    binary_list = convert_to_binary_list(array, x)
 
-    #print(binary_list)
-    new_list = [item for sublist in binary_list for item in sublist]
+binary_list = dec_to_bin_list(array, list2)
+
+
+new_list = [item for sublist in binary_list for item in sublist]
 print('secret message is:',new_list)
 #wrpcap('output.pcap',modified_packets)
