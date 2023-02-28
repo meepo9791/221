@@ -8,13 +8,19 @@ new_list = []
 array = []
 list2 = blenghlist
 # 使用 pyshark 读取 pcap 文件
-capture = pyshark.FileCapture("blv_mod.pcap", display_filter='udp', decode_as={'udp.port==65362': 'rtp'}, tshark_path='D:\wireshark\\tshark.exe')
+capture = pyshark.FileCapture("blv_mod.pcap", display_filter='udp', decode_as={'udp.port==65366': 'rtp'}, tshark_path='D:\wireshark\\tshark.exe')
 # 初始化 m 位为 1 的数据包数量
 m_bit_count = 0
 m_start = 0
 m_count = 0
 # 初始化间隔数据包数量
 interval_count = 0
+def adjust_str_length(s, length):
+    if len(s) > length:
+        s = s[-length:]  # 截取右边指定长度的部分
+    elif len(s) < length:
+        s = '0' * (length - len(s)) + s  # 左边补0，使字符串达到指定长度
+    return s
 
 # 遍历每个数据包
 for packet in capture:
@@ -44,7 +50,9 @@ def dec_to_bin_list(decimal_list, length_list):
         if i >= len(decimal_list):
             break
         binary_str = bin(decimal_list[i] ^ (decimal_list[i] >> 1))[2:]
-        binary_list.append(binary_str.zfill(length))
+        #为了防止噪声导致的错位，控制码长，舍弃多余码长列表的高位格雷码,或补充
+        binary_list.append(adjust_str_length(binary_str,length))
+
     return binary_list
 
 # 输出结果数组
@@ -53,9 +61,10 @@ def dec_to_bin_list(decimal_list, length_list):
 
 
 binary_list = dec_to_bin_list(array, list2)
+print(binary_list)
 new_list = [item for sublist in binary_list for item in sublist]
 
-print('secret message is:',new_list)
+
 #wrpcap('output.pcap',modified_packets)
 
 
@@ -73,5 +82,7 @@ def compare_lists(list1, list2):
 
 
 int_list = [int(x) for x in new_list]
+print('secret message  send is:   ', secarray)
+print('secret message  recived is:', int_list)
 print('bit error rate is:',compare_lists(int_list, secarray))
 # 计算考虑了乱序率和丢包率后的误码率

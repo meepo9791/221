@@ -10,10 +10,10 @@ secarray = []
 blenghlist = []
 input_str = input("请输入隐秘信息：")
 secarray = [int(char) for char in input_str]
-
+packet_loss_rate = float(input("请输入丢包率: "))
 infile = "test.pcap"
 outfile = "blvmodified_" + infile
-dest_port = 65364  # usefull to make sure you only action packets that are RTP
+dest_port = 65366  # usefull to make sure you only action packets that are RTP
 
 smp = 0
 m_bit_count = 0
@@ -45,12 +45,13 @@ def gray_to_decimal(n):
 while pkt < numberofpckts:
     if pl[pkt].haslayer(UDP):
         packet = pl[pkt][UDP]
-        if packet["UDP"].dport == 65362:  # Make sure its actually RTP
+        if packet["UDP"].dport == 65366:  # Make sure its actually RTP
             packet["UDP"].payload = RTP(packet["Raw"].load)
             m_bit = packet[RTP].marker
-            # 向新列表添加网络数据包
-            modified_packets.append(pl[pkt])
+
             if m_bit == 1:
+                # 向新列表添加网络数据包
+                modified_packets.append(pl[pkt])
                 # print('reach1')
                 m_start = 1
                 if m_start == 1:
@@ -93,20 +94,11 @@ while pkt < numberofpckts:
                                 interval_count = 0
             else:
                 # 如果 m 位不为 1，则间隔数据包数量加 1
+                if random.random() > (packet_loss_rate*1.4):
+                # 向新列表添加网络数据包
+                    modified_packets.append(pl[pkt])
                 if m_start == 1:
                     interval_count += 1
-
-            checksum_scapy_original = packet[UDP].chksum
-
-            packet[UDP].chksum = None
-            packetchk = IP(raw(packet))
-            checksum_scapy = packet[UDP].chksum
-            packet_raw = raw(packetchk)
-            udp_raw = packet_raw[20:]
-
-            chksum = in4_chksum(socket.IPPROTO_UDP, packetchk[IP], udp_raw)
-
-            packet[UDP].chksum = checksum_scapy
     pkt += 1
     # Write out new capture file
 for i in modified_packets:
@@ -118,31 +110,11 @@ print(blenghlist)
 
 
 def packet_reorder(lst, reorder_rate):
-    # 乱序函数
-    """
-        按照给定的乱序率对列表进行重新排序
-        """
-    if reorder_rate <= 0:
-        return lst
-    elif reorder_rate >= 1:
-        return random.sample(lst, len(lst))
-
-    # 计算需要乱序的元素个数
-    num_reorder = int(len(lst) * reorder_rate)
-
-    # 随机选择需要乱序的元素的下标
-    reorder_indices = random.sample(range(len(lst)), num_reorder)
-
-    # 对选择的元素进行乱序操作
-    reorder_values = [lst[i] for i in reorder_indices]
-    random.shuffle(reorder_values)
-
-    # 将乱序后的元素放回原来的位置
-    new_lst = list(lst)
-    for i, j in zip(reorder_indices, reorder_values):
-        new_lst[i] = j
-
-    return new_lst
+    lst=list(lst)
+    for i in range(len(lst) - 1):
+        if random.random() < reorder_rate/2:
+            lst[i], lst[i + 1] = lst[i + 1], lst[i]
+    return PacketList(lst)
 
 
 def compare_lists(list1, list2):
@@ -167,13 +139,13 @@ def packet_loss(packet_list, drop_rate):
 # 读取 pcap 文件
 packets = rdpcap(outfile)
 # 设置乱序率
-packet_loss_rate = float(input("请输入丢包率: "))
+
 packet_reorder_rate = float(input("请输入乱序率: "))
 # 对每个包增加丢包率
 # 对所有包增加乱序率
-packets = packet_loss(packets, packet_loss_rate)
-packets = list(filter(lambda p: p is not None, packets))
-wrpcap('new_test.pcap', packets)
+#packets = packet_loss(packets, packet_loss_rate)
+#packets = list(filter(lambda p: p is not None, packets))
+#wrpcap('blvloss.pcap', packets)
 # 保存丢包后的数据到pcap防止统计时长度不一
 repackets = packet_reorder(packets, packet_reorder_rate)
 
@@ -182,8 +154,8 @@ wrpcap('blv_mod.pcap', repackets)
 
 packets1 = rdpcap(outfile)
 packets2 = rdpcap('blv_mod.pcap')
-packets3 = rdpcap('new_test.pcap')
+num_packets0 = len(rdpcap('test.pcap'))
 num_packets1 = len(packets1)
 num_packets2 = len(packets2)
-print("loss count is:", (num_packets1 - num_packets2) / num_packets1)
-print("reorder rate is:", compare_lists(packets2, packets3))
+print("loss count is:", (num_packets0 - num_packets1) / num_packets0)
+print("reorder rate is:", compare_lists(packets2, packets1))
