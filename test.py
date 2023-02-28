@@ -1,25 +1,24 @@
-def dec_to_bin_list(decimal_list, length_list):
+def decimal_to_gray(n):
     """
-    Convert decimal numbers in decimal_list to binary numbers with lengths defined by corresponding elements in
-    length_list. Stop when length_list is exhausted.
-
-    Args:
-        decimal_list (list): A list of decimal numbers.
-        length_list (list): A list of integer values representing the length of the binary numbers to convert to.
-
-    Returns:
-        A list of binary numbers as strings.
+    将十进制数转换为格雷码
+    :param n: 输入的十进制数，int类型
+    :return: 格雷码，str类型
     """
-    binary_list = []
-    for i, length in enumerate(length_list):
-        if i >= len(decimal_list):
-            break
-        binary_str = format(decimal_list[i], 'b')
-        binary_list.append(binary_str.zfill(length))
-    return binary_list
+    return bin(n ^ (n >> 1))[2:]  # 假设格雷码的位数为8位
 
-array = [6, 1, 2, 1]
-list2 = [3,2,3,1]
 
-binary_list = dec_to_bin_list(array, list2)
-print(binary_list)
+
+def gray_to_decimal(n):
+    """
+    将格雷码转换为十进制数
+    :param n: 输入的格雷码，str类型
+    :return: 十进制数，int类型
+    """
+    binary = ''
+    for i in range(len(n)):
+        binary += str(int(n[i]) ^ int(binary[i-1]) if i > 0 else int(n[i]))
+    return int(binary, 2)
+a=decimal_to_gray(76)
+print(a)
+b=gray_to_decimal(a)
+print(b)

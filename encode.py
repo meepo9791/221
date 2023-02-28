@@ -17,12 +17,12 @@ m_count = 0
 # 初始化间隔数据包数量
 interval_count = 0
 modified_packets = []
-# 隐秘信息数组
-# array=[0,1,1,1,1,1,1]
+# 隐秘信息数组array
 array = []
 # array = input('secret message:')
 input_str = input("请输入隐秘信息：")
 array = [int(char) for char in input_str]
+print(array)
 pl = rdpcap(infile)
 
 # print number of packets

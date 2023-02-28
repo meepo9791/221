@@ -43,7 +43,7 @@ def compare_lists(list1, list2):
 packets = rdpcap('modified_test.pcap')
 # 设置丢包率和乱序率
 
-packet_reorder_rate = 0.05
+packet_reorder_rate = float(input("请输入乱序率: "))
 #对每个包增加丢包率
 # 对所有包增加乱序率
 packets = packet_reorder(packets, packet_reorder_rate)
