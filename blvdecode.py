@@ -13,6 +13,7 @@ capture = pyshark.FileCapture("blv_mod.pcap", display_filter='udp', decode_as={'
 m_bit_count = 0
 m_start = 0
 m_count = 0
+cap = 0
 # 初始化间隔数据包数量
 interval_count = 0
 def adjust_str_length(s, length):
@@ -86,3 +87,6 @@ print('secret message  send is:   ', secarray)
 print('secret message  recived is:', int_list)
 print('bit error rate is:',compare_lists(int_list, secarray))
 # 计算考虑了乱序率和丢包率后的误码率
+for ca in blenghlist:
+    cap += ca
+print('CTC capacity is:', round(30*(cap/len(blenghlist))))
