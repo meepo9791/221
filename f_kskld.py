@@ -17,7 +17,7 @@ print(ks_2samp(aerf, aerf2))
 
 # kl-test
 p = np.asarray([0.65, 0.25, 0.07, 0.03])
-q = np.array([0.6, 0.25, 0.1, 0.05])
+q = np.array([0.6, 0.25, 0.1, 0.03])
 k1 = scipy.stats.entropy(p, q)
 print(k1)
 
