@@ -30,8 +30,10 @@ for packet in capture:
         m_start = 1
         if m_start == 1:
             m_bit_count += 1
-            # 如果是第二个 m 位为 1 的数据包
+            # 如果是第二个 m 位为 1 的数据包,重置间隔数据包数量
             if m_bit_count == 2:
+                interval_count = 0
+            if m_bit_count == 3:
                 m_count += 1
                 # 判断间隔数据包数量
                 array.append(interval_count)
@@ -77,4 +79,4 @@ print('secret message  recived is:', se_array)
 print('bit error rate is:',compare_lists(new_array, se_array))
 # 计算考虑了乱序率和丢包率后的误码率
 
-print('CTC capacity is:', 30*bits)
+print('CTC capacity is:', 15*bits)

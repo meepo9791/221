@@ -35,6 +35,8 @@ for packet in capture:
             m_bit_count += 1
             # 如果是第二个 m 位为 1 的数据包
             if m_bit_count == 2:
+                interval_count = 0
+            if m_bit_count == 3:
                 m_count += 1
                 # print(interval_count % 2)
                 # 判断间隔数据包数量的奇偶性
@@ -67,3 +69,4 @@ def compare_lists(list1, list2):
 
 
 print('bit error rate is:', compare_lists(array, secarray))
+print('CTC capacity is:', 15)

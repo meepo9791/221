@@ -73,6 +73,8 @@ while pkt < numberofpckts:
                     m_bit_count += 1
                     # 如果是第二个 m 位为 1 的数据包
                     if m_bit_count == 2:
+                        interval_count = 0
+                    if m_bit_count == 3:
                         #print('reach2')
                         m_count += 1
                         m_bit_count = 1

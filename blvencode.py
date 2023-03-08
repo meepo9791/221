@@ -58,8 +58,10 @@ while pkt < numberofpckts:
                     m_bit_count += 1
                     # 如果是第二个 m 位为 1 的数据包
                     if m_bit_count == 2:
+                        interval_count = 0
                         # print('reach2')
                         # m_count += 1
+                    if m_bit_count == 3:
                         m_bit_count = 1
                         # 判断间隔数据包数量，如果不符合要求，则重排数据包
                         if m_count - 1 < len(secarray):
