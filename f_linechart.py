@@ -1,20 +1,37 @@
-import matplotlib as mpl
-# mpl.use("TkAgg") # Use TKAgg to show figures
+import numpy as np
 import matplotlib.pyplot as plt
 
-x_data = [1,2,3,4,5,6]
-y_data = [0.1,0.2,0.3,0.4,0.5,0.6]
+# 数据
+y_values1 = [0.0001, 0.0005, 0.001, 0.005, 0.01, 0.025, 0.1]
+y_values2 = [0.0003, 0.0007, 0.002, 0.006, 0.015, 0.03, 0.12]
+y_values3 = [0.0005, 0.001, 0.003, 0.008, 0.02, 0.035, 0.15]
 
-fig2 = plt.figure(figsize=(7, 5))
-plt.plot(x_data, y_data, c='g')  # 1.过点画线
+x_values = np.linspace(0, 1, len(y_values1))
+x_labels = ['0.1%', '0.2%', '0.5%', '1%', '2%', '5%', '10%']
 
-# plt.plot(x_data1,y_data1)
-# 一个图中要画出多条线的时候，只需要再使用plt.plot画出另一条线即可
+# 创建折线图
+fig, ax = plt.subplots()
+ax.plot(x_values, y_values1, marker='o', linestyle='-', linewidth=2, label='test1')
+ax.plot(x_values, y_values2, marker='s', linestyle='-', linewidth=2, label='test2')
+ax.plot(x_values, y_values3, marker='^', linestyle='-', linewidth=2, label='test3')
 
-plt.scatter(x_data, y_data)  # 2.画点
+# 设置轴标签
+ax.set_xlabel('X-axis')
+ax.set_ylabel('Y-axis')
 
-plt.title('X-Y Test')  # 3. 图标题
-plt.xlabel("X")  # 4. X轴名字
-plt.ylabel("Y")  # 5. Y轴名字
+# 设置对数刻度
+yticks = [0.0001,0.001, 0.01, 0.1, 1]
+ax.set_yscale('log')
+ax.set_yticks(yticks)
 
-plt.savefig("test.png")
+# 设置 X 轴固定刻度
+ax.set_xticks(x_values)
+ax.set_xticklabels(x_labels)
+
+# 设置图例
+ax.legend()
+# 设置标题
+ax.set_title('Log-Scale Line Chart with Uniformly Distributed X-axis Ticks')
+
+# 显示图形
+plt.savefig('误码率自身方案比较折线图.png',dpi=300)

@@ -1,34 +1,31 @@
-import numpy as np
-import matplotlib as mpl
-# mpl.use("TkAgg") # Use TKAgg to show figures
 import matplotlib.pyplot as plt
+import numpy as np
 
-# A B C 可理解三个地方 每个地点有 类别1 2 3的数据
+# 示例数据
+categories = ['A', 'B', 'C', 'D', 'E']
+values = [0.002, 0.015, 0.05, 0.2, 1]
 
-X_label = ["A", "B", "C"]  # 1.X轴上的各种选择
-Value_1 = [1, 4, 7]  # 2.类别1 对应的A B C的值
-Value_2 = [2, 5, 8]  # 3.类别2 对应的A B C的值
-Value_3 = [3, 6, 9]  # 4.类别3 对应的A B C的值
+# 创建一个figure和axes对象
+fig, ax = plt.subplots()
 
-# 创建分组柱状图，需要自己控制x轴坐标
-xticks = np.arange(len(X_label))
+# 绘制柱状图
+ax.bar(categories, values)
 
-fig, ax = plt.subplots(figsize=(10, 7))
-# A B C 中x的数量
-ax.bar(xticks, Value_1, width=0.15, label="1")  # 5.width是柱子的宽度
+# 设置y轴的刻度和标签
+yticks = [0.0001,0.001, 0.01, 0.1, 1]
+ax.set_yscale('log')
+ax.set_yticks(yticks)
 
-ax.bar(xticks + 0.22, Value_2, width=0.15, label="2")  # 6.0.22 是调整两个柱之间的距离
 
-ax.bar(xticks + 0.44, Value_3, width=0.15, label="3")
+# 设置x轴的标签
+ax.set_xlabel('Categories')
 
-plt.legend(['1', '2', '3'])  # 7.图例
-# 最后调整x轴标签的位置
-ax.set_xticks(xticks + 0.25)
-ax.set_xticklabels(X_label)
+# 设置y轴的标签
+ax.set_ylabel('Values (log scale)')
 
-plt.title('X-Y Test')  # 8. 图标题
-plt.xlabel("X")  # 9. X轴名字
-plt.ylabel("Y")  # 10. Y轴名字
+# 设置图表的标题
+ax.set_title('Bar Chart with Log Scale Y-axis')
 
-plt.savefig("test2.png")
-
+# 显示图表
+plt.tight_layout()
+plt.savefig('误码率横向柱状图.png',dpi=300)
